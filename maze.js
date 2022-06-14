@@ -3,13 +3,16 @@ let context = canvas.getContext("2d");
 let startNodeButton = document.getElementById("startNodeButton");
 let endNodeButton = document.getElementById("endNodeButton");
 let wallButton = document.getElementById("wallButton");
+let solveButton = document.getElementById("solveButton");
 
 //EVENT LISTENERS
 canvas.addEventListener("mousedown", canvasClicked);
 startNodeButton.addEventListener("click", startNodeButtonClicked);
 endNodeButton.addEventListener("click", endNodeButtonClicked);
 wallButton.addEventListener("click", wallButtonClicked);
+solveButton.addEventListener("click", scanGrid);
 
+//global vars
 let currentSelected = 0; //0 is a wall, 1 is a start node, 2 is an end node
 
 function startNodeButtonClicked(e) {
@@ -99,4 +102,46 @@ function fillInSquare(x, y, buttonPressed) {
     yCoord += 50;
   }
   drawSquare(xCoord, yCoord, buttonPressed);
+}
+
+function scanGrid() {
+  console.log("SOLVING....");
+  let grid = [];
+  if (Array.isArray(grid[0])) {
+    grid[0][0] = "nested loop";
+  } else {
+    grid[0] = ["nested loop"];
+  }
+  console.log(grid);
+  for (let rows = 0; rows < 500; rows++) {
+    for (let cols = 0; cols < 500; cols++) {
+      let pixelData = context.getImageData(rows + 51, cols + 51, 1, 1).data;
+      if (
+        pixelData[0] == 0 &&
+        pixelData[1] == 0 &&
+        pixelData[2] == 0 &&
+        pixelData[3] == 0
+      ) {
+        //pixel is transparent
+        grid[rows][cols] = "0";
+      } else if (
+        pixelData[0] == 0 &&
+        pixelData[1] == 0 &&
+        pixelData[2] == 0 &&
+        pixelData[3] == 255
+      ) {
+        //pixel is black
+        grid[rows][cols] = "1";
+      } else if (
+        pixelData[0] == 0 &&
+        pixelData[1] == 0 &&
+        pixelData[2] == 0 &&
+        pixelData[3] == 255
+      ) {
+      }
+    }
+  }
+  //scan grid making a 2D array
+
+  console.log(grid[0][0]);
 }
