@@ -1,7 +1,9 @@
 .button-div {
   display: block;
+  margin: auto;
+  margin-bottom: 10px;
 }
 
 .canvas-div {
-  margin: center;
+  margin: auto;
 }
