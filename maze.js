@@ -162,3 +162,5 @@ function scanGrid() {
 
   console.log(grid);
 }
+
+//TODO CREATE A GRAPH FROM THE GRID 2D Array
