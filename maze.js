@@ -106,16 +106,23 @@ function fillInSquare(x, y, buttonPressed) {
 
 function scanGrid() {
   console.log("SOLVING....");
+  ///////////////////////////////////
+  // INIT 2D ARRAY
   let grid = [];
-  if (Array.isArray(grid[0])) {
-    grid[0][0] = "nested loop";
-  } else {
-    grid[0] = ["nested loop"];
+  for (let i = 0; i < 10; i++) {
+    grid[i] = [];
   }
-  console.log(grid);
-  for (let rows = 0; rows < 500; rows++) {
-    for (let cols = 0; cols < 500; cols++) {
-      let pixelData = context.getImageData(rows + 51, cols + 51, 1, 1).data;
+  //////////////////////////////////
+
+  for (let rows = 0; rows < 10; rows++) {
+    for (let cols = 0; cols < 10; cols++) {
+      let pixelData = context.getImageData(
+        rows * 50 + 1,
+        cols * 50 + 1,
+        1,
+        1
+      ).data;
+
       if (
         pixelData[0] == 0 &&
         pixelData[1] == 0 &&
@@ -123,7 +130,7 @@ function scanGrid() {
         pixelData[3] == 0
       ) {
         //pixel is transparent
-        grid[rows][cols] = "0";
+        grid[rows][cols] = 0;
       } else if (
         pixelData[0] == 0 &&
         pixelData[1] == 0 &&
@@ -131,17 +138,27 @@ function scanGrid() {
         pixelData[3] == 255
       ) {
         //pixel is black
-        grid[rows][cols] = "1";
+        grid[rows][cols] = 1;
       } else if (
         pixelData[0] == 0 &&
+        pixelData[1] == 128 &&
+        pixelData[2] == 0 &&
+        pixelData[3] == 255
+      ) {
+        //pixel is green
+        grid[rows][cols] = 2;
+      } else if (
+        pixelData[0] == 255 &&
         pixelData[1] == 0 &&
         pixelData[2] == 0 &&
         pixelData[3] == 255
       ) {
+        //pixel is red
+        grid[rows][cols] = 3;
       }
     }
   }
   //scan grid making a 2D array
 
-  console.log(grid[0][0]);
+  console.log(grid);
 }
