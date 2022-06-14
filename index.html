@@ -4,20 +4,25 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="indexStyleSheet" />
     <title>Maze Solver</title>
   </head>
   <body>
-    <canvas
-      id="mazeCanvas"
-      width="500"
-      height="500"
-      oncontextmenu="return false;"
-    ></canvas>
+    <div class="button-div">
+      <button id="startNodeButton">Start Node</button>|
+      <button id="endNodeButton">End Node</button>
+      <button id="wallButton">Walls</button>
+      <button id="solveButton">Solve</button>
+    </div>
+    <div class="canvas-div">
+      <canvas
+        id="mazeCanvas"
+        width="500"
+        height="500"
+        oncontextmenu="return false;"
+      ></canvas>
+    </div>
 
-    <button id="startNodeButton">Start Node</button>|
-    <button id="endNodeButton">End Node</button>
-    <button id="wallButton">Walls</button>
-    <button id="solveButton">Solve</button>
     <script src="maze.js"></script>
   </body>
 </html>
