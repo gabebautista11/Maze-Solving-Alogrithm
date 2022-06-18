@@ -114,11 +114,11 @@ function scanGrid() {
   }
   //////////////////////////////////
 
-  for (let rows = 0; rows < 10; rows++) {
-    for (let cols = 0; cols < 10; cols++) {
+  for (let row = 0; row < 10; row++) {
+    for (let col = 0; col < 10; col++) {
       let pixelData = context.getImageData(
-        rows * 50 + 1,
-        cols * 50 + 1,
+        row * 50 + 1,
+        col * 50 + 1,
         1,
         1
       ).data;
@@ -130,7 +130,7 @@ function scanGrid() {
         pixelData[3] == 0
       ) {
         //pixel is transparent
-        grid[rows][cols] = 0;
+        grid[col][row] = 0;
       } else if (
         pixelData[0] == 0 &&
         pixelData[1] == 0 &&
@@ -138,7 +138,7 @@ function scanGrid() {
         pixelData[3] == 255
       ) {
         //pixel is black
-        grid[rows][cols] = 1;
+        grid[col][row] = 1;
       } else if (
         pixelData[0] == 0 &&
         pixelData[1] == 128 &&
@@ -146,7 +146,7 @@ function scanGrid() {
         pixelData[3] == 255
       ) {
         //pixel is green
-        grid[rows][cols] = 2;
+        grid[col][row] = 2;
       } else if (
         pixelData[0] == 255 &&
         pixelData[1] == 0 &&
@@ -154,13 +154,63 @@ function scanGrid() {
         pixelData[3] == 255
       ) {
         //pixel is red
-        grid[rows][cols] = 3;
+        grid[col][row] = 3;
       }
     }
   }
   //scan grid making a 2D array
 
   console.log(grid);
+
+  let graph = new Graph(grid);
+  graph.printMatrix();
+  graph.createGraph();
 }
 
 //TODO CREATE A GRAPH FROM THE GRID 2D Array
+
+// create a graph class
+
+class Graph {
+  constructor(matrix) {
+    this.matrix = matrix;
+  }
+
+  //create nodes
+
+  createGraph() {
+    for (let row = 0; row < 10; row++) {
+      for (let col = 0; col < 10; col++) {
+        console.log(this.matrix[row][col]); //reads left to right top to bottom
+      }
+    }
+  }
+
+  printMatrix() {
+    console.log(this.matrix);
+  }
+}
+
+class Node {
+  constructor(xCoord, yCoord, value) {
+    this.xCoord = xCoord;
+    this.yCoord = yCoord;
+    this.value = value; //1, 2, or 3
+    this.neighborNodes = [];
+  }
+
+  get neighborNodes() {
+    return this.neighborNodes;
+  }
+
+  get xCoord() {
+    return this.xCoord;
+  }
+  get yCoord() {
+    return this.yCoord;
+  }
+
+  get value() {
+    return this.value;
+  }
+}
