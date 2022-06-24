@@ -163,8 +163,9 @@ function scanGrid() {
   console.log(grid);
 
   let graph = new Graph(grid);
-  graph.printMatrix();
-  graph.createGraph();
+
+  graph.createNodes();
+  graph.createEdges();
 }
 
 //TODO CREATE A GRAPH FROM THE GRID 2D Array
@@ -174,16 +175,62 @@ function scanGrid() {
 class Graph {
   constructor(matrix) {
     this.matrix = matrix;
+    this.adjacencyList = {};
+    //holds list of nodes
+    //each node in the list has a list of all nodes that are connected to it
+  }
+
+  addNode(node) {
+    if (!this.adjacencyList[node]) {
+      this.adjacencyList[node] = [];
+    }
+  }
+
+  addEdge(node1, node2) {
+    this.adjacencyList[node1].push(node2);
+    this.adjacencyList[node2].push(node2);
+  }
+
+  removeEdge(node1, node2) {
+    this.adjacencyList[node1] = this.adjacencyList[node1].filter(
+      (v) => v !== node2
+    );
+    this.adjacencyList[node2] = this.adjacencyList[node2].filter(
+      (v) => v !== node1
+    );
+  }
+
+  removeNode(node) {
+    let edges = this.adjacencyList[node];
+    for (let edge of edges) {
+      this.removeEdge(vertex, edge);
+    }
+    delete this.adjacencyList[vertex];
   }
 
   //create nodes
-
-  createGraph() {
+  createNodes() {
     for (let row = 0; row < 10; row++) {
       for (let col = 0; col < 10; col++) {
         console.log(this.matrix[row][col]); //reads left to right top to bottom
+        if (this.matrix[row][col] == 0) {
+          //this is a white box
+          this.addNode(new Node(row, col, 0));
+        } else if (this.matrix[row][col] == 2) {
+          //start node
+          this.addNode(new Node(row, col, 0));
+        } else if (this.matrix[row][col] == 3) {
+          //end node
+          this.addNode(new Node(row, col, 3));
+        }
       }
     }
+  }
+
+  createEdges() {
+    this.adjacencyList.forEach((node) => {
+      node.node();
+    });
   }
 
   printMatrix() {
@@ -196,21 +243,9 @@ class Node {
     this.xCoord = xCoord;
     this.yCoord = yCoord;
     this.value = value; //1, 2, or 3
-    this.neighborNodes = [];
   }
 
-  get neighborNodes() {
-    return this.neighborNodes;
-  }
-
-  get xCoord() {
-    return this.xCoord;
-  }
-  get yCoord() {
-    return this.yCoord;
-  }
-
-  get value() {
-    return this.value;
+  get node() {
+    return this.node;
   }
 }
