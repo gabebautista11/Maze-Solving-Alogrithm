@@ -17,15 +17,12 @@ let currentSelected = 0; //0 is a wall, 1 is a start node, 2 is an end node
 
 function startNodeButtonClicked(e) {
   currentSelected = 1;
-  console.log(e);
 }
 function endNodeButtonClicked(e) {
   currentSelected = 2;
-  console.log(e);
 }
 function wallButtonClicked(e) {
   currentSelected = 0;
-  console.log(e);
 }
 
 function drawGrid() {
@@ -80,11 +77,9 @@ function canvasClicked(e) {
   if (e.button == 0) {
     //left click
     fillInSquare(e.offsetX, e.offsetY, 0);
-    console.log("left click");
   } else if (e.button == 2) {
     //right click
     fillInSquare(e.offsetX, e.offsetY, 1);
-    console.log("right click");
   }
 }
 
@@ -105,7 +100,6 @@ function fillInSquare(x, y, buttonPressed) {
 }
 
 function scanGrid() {
-  console.log("SOLVING....");
   ///////////////////////////////////
   // INIT 2D ARRAY
   let grid = [];
@@ -160,8 +154,6 @@ function scanGrid() {
   }
   //scan grid making a 2D array
 
-  console.log(grid);
-
   let graph = new Graph(grid);
 
   graph.createNodes();
@@ -175,6 +167,7 @@ function scanGrid() {
 class Graph {
   constructor(matrix) {
     this.matrix = matrix;
+    console.log(this.matrix);
     this.adjacencyList = {};
     //holds list of nodes
     //each node in the list has a list of all nodes that are connected to it
@@ -183,6 +176,7 @@ class Graph {
   addNode(node) {
     if (!this.adjacencyList[node]) {
       this.adjacencyList[node] = [];
+      console.log("added node");
     }
   }
 
@@ -212,29 +206,26 @@ class Graph {
   createNodes() {
     for (let row = 0; row < 10; row++) {
       for (let col = 0; col < 10; col++) {
-        console.log(this.matrix[row][col]); //reads left to right top to bottom
+        //console.log(this.matrix[row][col]); //reads left to right top to bottom
         if (this.matrix[row][col] == 0) {
           //this is a white box
           this.addNode(new Node(row, col, 0));
         } else if (this.matrix[row][col] == 2) {
           //start node
-          this.addNode(new Node(row, col, 0));
+          this.addNode(new Node(row, col, 2));
         } else if (this.matrix[row][col] == 3) {
           //end node
           this.addNode(new Node(row, col, 3));
         }
       }
     }
+    console.log(this.adjacencyList);
   }
 
   createEdges() {
-    this.adjacencyList.forEach((node) => {
-      node.node();
-    });
-  }
-
-  printMatrix() {
-    console.log(this.matrix);
+    for (let index = 0; index < this.adjacencyList; index++) {
+      console.log(this.adjacencyList[index]);
+    }
   }
 }
 
