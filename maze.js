@@ -153,11 +153,15 @@ function scanGrid() {
     }
   }
   //scan grid making a 2D array
+  createGraph(grid);
 
-  let graph = new Graph(grid);
+  function createGraph(grid) {
+    let graph = new Graph(grid);
 
-  graph.createNodes();
-  graph.createEdges();
+    graph.createNodes();
+    graph.createEdges();
+    console.log(graph.adjacencyList);
+  }
 }
 
 //TODO CREATE A GRAPH FROM THE GRID 2D Array
@@ -167,22 +171,46 @@ function scanGrid() {
 class Graph {
   constructor(matrix) {
     this.matrix = matrix;
-    console.log(this.matrix);
-    this.adjacencyList = {};
+    this.adjacencyList = [];
     //holds list of nodes
     //each node in the list has a list of all nodes that are connected to it
   }
 
+  getNode(row, col) {
+    for (let index = 0; index < this.adjacencyList.length; index++) {
+      if (
+        this.adjacencyList[index].xCoord == col &&
+        this.adjacencyList[index].yCoord == row
+      ) {
+        return this.adjacencyList[index];
+      } else {
+        return -1;
+      }
+    }
+  }
   addNode(node) {
     if (!this.adjacencyList[node]) {
-      this.adjacencyList[node] = [];
+      this.adjacencyList.push(node);
       console.log("added node");
     }
   }
 
+
+  getNodeIndex(node){
+    for (let index = 0; index < this.adjacencyList.length; index++) {
+      if (
+        this.adjacencyList[index].xCoord == col &&
+        this.adjacencyList[index].yCoord == row
+      ) {
+        return index;
+      } else {
+        return -1;
+      }
+    }
+  }
   addEdge(node1, node2) {
     this.adjacencyList[node1].push(node2);
-    this.adjacencyList[node2].push(node2);
+    this.adjacencyList[node2].push(node1);
   }
 
   removeEdge(node1, node2) {
@@ -209,7 +237,7 @@ class Graph {
         //console.log(this.matrix[row][col]); //reads left to right top to bottom
         if (this.matrix[row][col] == 0) {
           //this is a white box
-          this.addNode(new Node(row, col, 0));
+          this.addNode(new Node(row, col, 0)); //add node to graph
         } else if (this.matrix[row][col] == 2) {
           //start node
           this.addNode(new Node(row, col, 2));
@@ -219,13 +247,28 @@ class Graph {
         }
       }
     }
-    console.log(this.adjacencyList);
   }
 
   createEdges() {
-    for (let index = 0; index < this.adjacencyList; index++) {
-      console.log(this.adjacencyList[index]);
+    for (let row = 0; row < 10; row++) {
+      for (let col = 0; col < 10; col++) {
+        this.checkNeighbors(row, col, this.getNode(row, col));
+      }
     }
+  }
+  checkNeighbors(row, col, node) {
+    //if its on any edge check only what is around it
+      for (let r = row; r < row + 3; r++) {
+        for (let c = col; c < col + 3; c++) {
+          try {
+            let neighboorNode = this.getNode(row, col)
+            if(neighboorNode != -1){
+              this.addEdge(node, neighboorNode)
+            }
+          } catch (error) {
+          }
+        }
+      }
   }
 }
 
