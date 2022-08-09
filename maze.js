@@ -159,8 +159,9 @@ function scanGrid() {
     let graph = new Graph(grid);
 
     graph.createNodes();
-    graph.createEdges();
     console.log(graph.adjacencyList);
+    graph.createEdges();
+    
   }
 }
 
@@ -176,18 +177,6 @@ class Graph {
     //each node in the list has a list of all nodes that are connected to it
   }
 
-  getNode(row, col) {
-    for (let index = 0; index < this.adjacencyList.length; index++) {
-      if (
-        this.adjacencyList[index].xCoord == col &&
-        this.adjacencyList[index].yCoord == row
-      ) {
-        return this.adjacencyList[index];
-      } else {
-        return -1;
-      }
-    }
-  }
   addNode(node) {
     if (!this.adjacencyList[node]) {
       this.adjacencyList.push(node);
@@ -208,26 +197,10 @@ class Graph {
   addEdge(node1, node2) {
     // this.adjacencyList[node1].push(node2);
     // this.adjacencyList[node2].push(node1);
-    node1.adjacencyList.push(node2);
-    node2.adjacencyList.push(node1);
+    node1.addNodeToAdjacencyList(node2);
+    node2.addNodeToAdjacencyList(node1);
   }
 
-  removeEdge(node1, node2) {
-    this.adjacencyList[node1] = this.adjacencyList[node1].filter(
-      (v) => v !== node2
-    );
-    this.adjacencyList[node2] = this.adjacencyList[node2].filter(
-      (v) => v !== node1
-    );
-  }
-
-  removeNode(node) {
-    let edges = this.adjacencyList[node];
-    for (let edge of edges) {
-      this.removeEdge(vertex, edge);
-    }
-    delete this.adjacencyList[vertex];
-  }
 
   //create nodes
   createNodes() {
@@ -258,7 +231,6 @@ class Graph {
     }
   }
   checkNeighbors(row, col, node) {
-    console.log(row, col);
     //if its on any edge check only what is around it
     if (this.getNodeIndex(row, col) != -1) {
       // if the given node is a real node in the graph
@@ -273,9 +245,7 @@ class Graph {
               console.log(neighborNodeIndex, r, c);
               if (neighborNodeIndex != -1) {
                 //if it could find the neighbor node
-                console.log(
-                  `current node ${this.adjacencyList[neighborNodeIndex]}`
-                );
+                console.log(`THIS IS WHAT I GET FROM USING NODEINDEX ${this.adjacencyList[neighborNodeIndex.xCoord]}`);
                 this.addEdge(node, this.adjacencyList[neighborNodeIndex]);
                 console.log("added edge");
               }
@@ -299,5 +269,9 @@ class Node {
 
   get node() {
     return this.node;
+  }
+
+  addNodeToAdjacencyList(node) {
+    this.adjacencyList.push(node);
   }
 }
