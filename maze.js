@@ -161,7 +161,7 @@ function scanGrid() {
     graph.createNodes();
     console.log(graph.adjacencyList);
     graph.createEdges();
-    
+    console.log(graph.adjacencyList);
   }
 }
 
@@ -201,8 +201,7 @@ class Graph {
     node2.addNodeToAdjacencyList(node1);
   }
 
-
-  //create nodes
+  //create nodes from the matrix and uses addNode to add it to the graph
   createNodes() {
     for (let row = 0; row < 10; row++) {
       for (let col = 0; col < 10; col++) {
@@ -220,16 +219,26 @@ class Graph {
       }
     }
   }
-
+ /**
+  * Loops through the matrix and adds edges from the 2D array
+  */
   createEdges() {
     for (let row = 0; row < 10; row++) {
       for (let col = 0; col < 10; col++) {
         if (this.getNodeIndex(row, col) != -1) {
-          this.checkNeighbors(row, col, this.getNode(row, col));
+          console.log(this.getNodeIndex(row, col));
+          this.checkNeighbors(row, col, this.getNodeIndex(row, col));
         }
       }
     }
   }
+
+  /**
+   * 
+   * @param {*} row 
+   * @param {*} col 
+   * @param {*} node 
+   */
   checkNeighbors(row, col, node) {
     //if its on any edge check only what is around it
     if (this.getNodeIndex(row, col) != -1) {
@@ -245,8 +254,12 @@ class Graph {
               console.log(neighborNodeIndex, r, c);
               if (neighborNodeIndex != -1) {
                 //if it could find the neighbor node
-                console.log(`THIS IS WHAT I GET FROM USING NODEINDEX ${this.adjacencyList[neighborNodeIndex.xCoord]}`);
-                this.addEdge(node, this.adjacencyList[neighborNodeIndex]);
+                console.log(
+                  `THIS IS WHAT I GET FROM USING NODEINDEX ${
+                    this.adjacencyList[neighborNodeIndex.xCoord]
+                  }`
+                );
+                this.addEdge(this.adjacencyList[node], this.adjacencyList[neighborNodeIndex]);
                 console.log("added edge");
               }
             } catch (error) {
