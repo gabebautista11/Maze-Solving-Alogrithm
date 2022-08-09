@@ -191,12 +191,10 @@ class Graph {
   addNode(node) {
     if (!this.adjacencyList[node]) {
       this.adjacencyList.push(node);
-      console.log("added node");
     }
   }
 
-
-  getNodeIndex(node){
+  getNodeIndex(row, col) {
     for (let index = 0; index < this.adjacencyList.length; index++) {
       if (
         this.adjacencyList[index].xCoord == col &&
@@ -209,8 +207,10 @@ class Graph {
     }
   }
   addEdge(node1, node2) {
-    this.adjacencyList[node1].push(node2);
-    this.adjacencyList[node2].push(node1);
+    // this.adjacencyList[node1].push(node2);
+    // this.adjacencyList[node2].push(node1);
+    node1.adjacencyList.push(node2);
+    node2.adjacencyList.push(node1);
   }
 
   removeEdge(node1, node2) {
@@ -237,13 +237,13 @@ class Graph {
         //console.log(this.matrix[row][col]); //reads left to right top to bottom
         if (this.matrix[row][col] == 0) {
           //this is a white box
-          this.addNode(new Node(row, col, 0)); //add node to graph
+          this.addNode(new Node(col, row, 0)); //add node to graph
         } else if (this.matrix[row][col] == 2) {
           //start node
-          this.addNode(new Node(row, col, 2));
+          this.addNode(new Node(col, row, 2));
         } else if (this.matrix[row][col] == 3) {
           //end node
-          this.addNode(new Node(row, col, 3));
+          this.addNode(new Node(col, row, 3));
         }
       }
     }
@@ -258,25 +258,41 @@ class Graph {
   }
   checkNeighbors(row, col, node) {
     //if its on any edge check only what is around it
-      for (let r = row; r < row + 3; r++) {
-        for (let c = col; c < col + 3; c++) {
-          try {
-            let neighboorNode = this.getNode(row, col)
-            if(neighboorNode != -1){
-              this.addEdge(node, neighboorNode)
+    if (this.getNode(row, col) != -1) {
+      // if the given node is a real node in the graph
+      for (let r = row - 1; r < row + 2; r++) {
+        //loop through rows
+        for (let c = col - 1; c < col + 2; c++) {
+          //loop through cols
+          if (r != row || c != col) {
+            //this makes sure it does not check the middle
+            try {
+              let neighborNodeIndex = this.getNodeIndex(r, c); //neighbor node
+              console.log(neighborNodeIndex, r, c);
+              if (neighborNodeIndex != -1) {
+                //if it could find the neighbor node
+                console.log(
+                  `current node ${this.adjacencyList[neighborNodeIndex]}`
+                );
+                this.addEdge(node, this.adjacencyList[neighborNodeIndex]);
+                console.log("added edge");
+              }
+            } catch (error) {
+              console.log(error);
             }
-          } catch (error) {
           }
         }
       }
+    }
   }
 }
 
 class Node {
   constructor(xCoord, yCoord, value) {
-    this.xCoord = xCoord;
-    this.yCoord = yCoord;
+    this.xCoord = xCoord; //col
+    this.yCoord = yCoord; //row
     this.value = value; //1, 2, or 3
+    this.adjacencyList = [];
   }
 
   get node() {
