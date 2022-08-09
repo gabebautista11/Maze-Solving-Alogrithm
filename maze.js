@@ -201,10 +201,9 @@ class Graph {
         this.adjacencyList[index].yCoord == row
       ) {
         return index;
-      } else {
-        return -1;
       }
     }
+    return -1;
   }
   addEdge(node1, node2) {
     // this.adjacencyList[node1].push(node2);
@@ -252,13 +251,16 @@ class Graph {
   createEdges() {
     for (let row = 0; row < 10; row++) {
       for (let col = 0; col < 10; col++) {
-        this.checkNeighbors(row, col, this.getNode(row, col));
+        if (this.getNodeIndex(row, col) != -1) {
+          this.checkNeighbors(row, col, this.getNode(row, col));
+        }
       }
     }
   }
   checkNeighbors(row, col, node) {
+    console.log(row, col);
     //if its on any edge check only what is around it
-    if (this.getNode(row, col) != -1) {
+    if (this.getNodeIndex(row, col) != -1) {
       // if the given node is a real node in the graph
       for (let r = row - 1; r < row + 2; r++) {
         //loop through rows
