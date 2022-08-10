@@ -195,8 +195,6 @@ class Graph {
     return -1;
   }
   addEdge(node1, node2) {
-    // this.adjacencyList[node1].push(node2);
-    // this.adjacencyList[node2].push(node1);
     node1.addNodeToAdjacencyList(node2);
     node2.addNodeToAdjacencyList(node1);
   }
@@ -219,9 +217,9 @@ class Graph {
       }
     }
   }
- /**
-  * Loops through the matrix and adds edges from the 2D array
-  */
+  /**
+   * Loops through the matrix and adds edges from the 2D array
+   */
   createEdges() {
     for (let row = 0; row < 10; row++) {
       for (let col = 0; col < 10; col++) {
@@ -234,10 +232,10 @@ class Graph {
   }
 
   /**
-   * 
-   * @param {*} row 
-   * @param {*} col 
-   * @param {*} node 
+   * checks neighbor nodes for edge connection
+   * @param {*} row
+   * @param {*} col
+   * @param {*} node
    */
   checkNeighbors(row, col, node) {
     //if its on any edge check only what is around it
@@ -254,12 +252,10 @@ class Graph {
               console.log(neighborNodeIndex, r, c);
               if (neighborNodeIndex != -1) {
                 //if it could find the neighbor node
-                console.log(
-                  `THIS IS WHAT I GET FROM USING NODEINDEX ${
-                    this.adjacencyList[neighborNodeIndex.xCoord]
-                  }`
+                this.addEdge(
+                  this.adjacencyList[node],
+                  this.adjacencyList[neighborNodeIndex]
                 );
-                this.addEdge(this.adjacencyList[node], this.adjacencyList[neighborNodeIndex]);
                 console.log("added edge");
               }
             } catch (error) {
@@ -286,5 +282,20 @@ class Node {
 
   addNodeToAdjacencyList(node) {
     this.adjacencyList.push(node);
+  }
+
+  /**
+   * Checks if parameter node is in Adjacency List
+   */
+  checkIfNodeIsInAdjacencyList(node) {
+    let x = node.xCoord;
+    let y = node.yCoord;
+    this.adjacencyList.forEach((element) => {
+      if (element.xCoord == x && element.yCoord == y) {
+        //node already in list
+        return false;
+      }
+    });
+    return true;
   }
 }
