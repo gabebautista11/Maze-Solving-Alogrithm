@@ -194,9 +194,14 @@ class Graph {
     }
     return -1;
   }
+
   addEdge(node1, node2) {
-    node1.addNodeToAdjacencyList(node2);
-    node2.addNodeToAdjacencyList(node1);
+    if (node1.isNodeNotInList(node2)) { //this if statment checks before adding duplicates
+      node1.addNodeToAdjacencyList(node2);
+    }
+    if (node2.isNodeNotInList(node1)) {
+      node2.addNodeToAdjacencyList(node1);
+    }
   }
 
   //create nodes from the matrix and uses addNode to add it to the graph
@@ -287,7 +292,7 @@ class Node {
   /**
    * Checks if parameter node is in Adjacency List
    */
-  checkIfNodeIsInAdjacencyList(node) {
+  isNodeNotInList(node) {
     let x = node.xCoord;
     let y = node.yCoord;
     this.adjacencyList.forEach((element) => {
