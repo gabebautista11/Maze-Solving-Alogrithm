@@ -162,10 +162,11 @@ function scanGrid() {
     let graph = new Graph(grid);
 
     graph.createNodes();
-    console.log(graph.adjacencyList);
+
     graph.createEdges();
-    console.log(graph.adjacencyList);
+    console.log("starting dfs");
     graph.dfs();
+    console.log("finished dfs");
   }
 }
 
@@ -295,7 +296,18 @@ class Graph {
       this.adjacencyList[
         this.getNodeIndex(this.endingNodeRow, this.endingNodeCol)
       ];
-    this.dfsRecursive(this, startNode);
+    this.dfsLoop(this, startNode);
+    // procedure DFS_iterative(G, v) is
+    // let S be a stack
+    // S.push(v)
+    // while S is not empty do
+    //     v = S.pop()
+    //     if v is not labeled as discovered then
+    //         label v as discovered
+    //         for all edges from v to w in G.adjacentEdges(v) do
+    //             S.push(w)
+
+    //  this.dfsRecursive(this, startNode);
     // procedure DFS(G, v) is
     // label v as discovered
     // for all directed edges from v to w that are in G.adjacentEdges(v) do
@@ -303,9 +315,23 @@ class Graph {
     //         recursively call DFS(G, w)
   }
 
+  dfsLoop(graph, node) {
+    let stack = []; //stack ds
+    stack.push(node);
+    while (stack.length > 0) {
+      node = stack.pop();
+      if (node.isVisited() == false) {
+        node.setVisited(); //sets node to visisted
+        drawSquare(node.xCoord * 50, node.yCoord * 50, "search");
+        node.getAdjList().forEach((element) => {
+          stack.push(element);
+        });
+      }
+    }
+  }
+
   dfsRecursive(graph, node) {
     node.setVisited();
-
     node.getAdjList().forEach((element) => {
       if (element.isVisited() == false) {
         drawSquare(element.xCoord, element.yCoord, "search");
