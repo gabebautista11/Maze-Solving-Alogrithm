@@ -63,6 +63,9 @@ let drawSquare = (x, y, buttonPressed) => {
       context.fillStyle = "red";
       context.fillRect(x, y, 50, 50);
     }
+  } else if ((buttonPressed = "search")) {
+    context.fillStyle = "blue";
+    context.fillRect(x, y, 50, 50);
   } else {
     //rect white
     context.fillStyle = "white";
@@ -162,6 +165,7 @@ function scanGrid() {
     console.log(graph.adjacencyList);
     graph.createEdges();
     console.log(graph.adjacencyList);
+    graph.dfs();
   }
 }
 
@@ -173,6 +177,10 @@ class Graph {
   constructor(matrix) {
     this.matrix = matrix;
     this.adjacencyList = [];
+    this.startingNodeCol = 0;
+    this.startingNodeRow = 0;
+    this.endingNodeCol = 0;
+    this.endingNodeRow = 0;
     //holds list of nodes
     //each node in the list has a list of all nodes that are connected to it
   }
@@ -195,13 +203,16 @@ class Graph {
     return -1;
   }
 
-  addEdge(node1, node2) {
-    if (node1.isNodeNotInList(node2)) { //this if statment checks before adding duplicates
+  addEdge(node1Index, node2Index) {
+    let node1 = this.adjacencyList[node1Index];
+    let node2 = this.adjacencyList[node2Index];
+    if (node1.isNodeNotInList(node2) && node2.isNodeNotInList(node1)) {
+      //this if statment checks before adding duplicates
       node1.addNodeToAdjacencyList(node2);
-    }
-    if (node2.isNodeNotInList(node1)) {
       node2.addNodeToAdjacencyList(node1);
     }
+
+    console.log("added edge");
   }
 
   //create nodes from the matrix and uses addNode to add it to the graph
@@ -215,9 +226,13 @@ class Graph {
         } else if (this.matrix[row][col] == 2) {
           //start node
           this.addNode(new Node(col, row, 2));
+          this.startingNodeCol = col;
+          this.startingNodeRow = row;
         } else if (this.matrix[row][col] == 3) {
           //end node
           this.addNode(new Node(col, row, 3));
+          this.endingNodeCol = col;
+          this.endingNodeRow = row;
         }
       }
     }
@@ -229,7 +244,6 @@ class Graph {
     for (let row = 0; row < 10; row++) {
       for (let col = 0; col < 10; col++) {
         if (this.getNodeIndex(row, col) != -1) {
-          console.log(this.getNodeIndex(row, col));
           this.checkNeighbors(row, col, this.getNodeIndex(row, col));
         }
       }
@@ -257,11 +271,7 @@ class Graph {
               console.log(neighborNodeIndex, r, c);
               if (neighborNodeIndex != -1) {
                 //if it could find the neighbor node
-                this.addEdge(
-                  this.adjacencyList[node],
-                  this.adjacencyList[neighborNodeIndex]
-                );
-                console.log("added edge");
+                this.addEdge(node, neighborNodeIndex);
               }
             } catch (error) {
               console.log(error);
@@ -271,6 +281,38 @@ class Graph {
       }
     }
   }
+
+  /**
+   * depth First Search
+   */
+  dfs() {
+    //start node
+    let startNode =
+      this.adjacencyList[
+        this.getNodeIndex(this.startingNodeRow, this.startingNodeCol)
+      ];
+    let endNode =
+      this.adjacencyList[
+        this.getNodeIndex(this.endingNodeRow, this.endingNodeCol)
+      ];
+    this.dfsRecursive(this, startNode);
+    // procedure DFS(G, v) is
+    // label v as discovered
+    // for all directed edges from v to w that are in G.adjacentEdges(v) do
+    //     if vertex w is not labeled as discovered then
+    //         recursively call DFS(G, w)
+  }
+
+  dfsRecursive(graph, node) {
+    node.setVisited();
+
+    node.getAdjList().forEach((element) => {
+      if (element.isVisited() == false) {
+        drawSquare(element.xCoord, element.yCoord, "search");
+        this.dfs(graph, element);
+      }
+    });
+  }
 }
 
 class Node {
@@ -278,7 +320,8 @@ class Node {
     this.xCoord = xCoord; //col
     this.yCoord = yCoord; //row
     this.value = value; //1, 2, or 3
-    this.adjacencyList = [];
+    this.adjacencyList = new Set();
+    this.visited = false;
   }
 
   get node() {
@@ -286,7 +329,7 @@ class Node {
   }
 
   addNodeToAdjacencyList(node) {
-    this.adjacencyList.push(node);
+    this.adjacencyList.add(node);
   }
 
   /**
@@ -296,11 +339,26 @@ class Node {
     let x = node.xCoord;
     let y = node.yCoord;
     this.adjacencyList.forEach((element) => {
+      console.log(element);
       if (element.xCoord == x && element.yCoord == y) {
         //node already in list
         return false;
       }
     });
+    return true;
+  }
+  setVisited() {
+    this.visited = true;
+  }
+
+  getAdjList() {
+    return this.adjacencyList;
+  }
+
+  isVisited() {
+    if (this.visited == false) {
+      return false;
+    }
     return true;
   }
 }
