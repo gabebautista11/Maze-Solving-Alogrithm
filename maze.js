@@ -63,12 +63,12 @@ let drawSquare = (x, y, buttonPressed) => {
       context.fillStyle = "red";
       context.fillRect(x, y, 50, 50);
     }
-  } else if ((buttonPressed = "search")) {
+  } else if (buttonPressed == "search") {
     context.fillStyle = "blue";
     context.fillRect(x, y, 50, 50);
   } else {
     //rect white
-    context.fillStyle = "white";
+    context.fillStyle = "rgba(255,255,255, 1)";
     context.fillRect(x, y, 50, 50);
   }
   drawGrid();
@@ -120,13 +120,17 @@ function scanGrid() {
         1
       ).data;
 
+      //pixel is transparent or white
       if (
-        pixelData[0] == 0 &&
-        pixelData[1] == 0 &&
-        pixelData[2] == 0 &&
-        pixelData[3] == 0
+        (pixelData[0] == 0 &&
+          pixelData[1] == 0 &&
+          pixelData[2] == 0 &&
+          pixelData[3] == 0) ||
+        (pixelData[0] == 255 &&
+          pixelData[1] == 255 &&
+          pixelData[2] == 255 &&
+          pixelData[3] == 255)
       ) {
-        //pixel is transparent
         grid[col][row] = 0;
       } else if (
         pixelData[0] == 0 &&
@@ -165,8 +169,10 @@ function scanGrid() {
 
     graph.createEdges();
     console.log("starting dfs");
-    graph.dfs();
+    let solution = graph.dfs();
     console.log("finished dfs");
+
+    console.log(solution);
   }
 }
 
@@ -296,38 +302,34 @@ class Graph {
       this.adjacencyList[
         this.getNodeIndex(this.endingNodeRow, this.endingNodeCol)
       ];
-    this.dfsLoop(this, startNode);
-    // procedure DFS_iterative(G, v) is
-    // let S be a stack
-    // S.push(v)
-    // while S is not empty do
-    //     v = S.pop()
-    //     if v is not labeled as discovered then
-    //         label v as discovered
-    //         for all edges from v to w in G.adjacentEdges(v) do
-    //             S.push(w)
 
-    //  this.dfsRecursive(this, startNode);
-    // procedure DFS(G, v) is
-    // label v as discovered
-    // for all directed edges from v to w that are in G.adjacentEdges(v) do
-    //     if vertex w is not labeled as discovered then
-    //         recursively call DFS(G, w)
+    return this.dfsLoop(this, startNode, endNode);
+    
   }
 
-  dfsLoop(graph, node) {
+  dfsLoop(graph, node, endNode) {
+    let i = 0;
     let stack = []; //stack ds
     stack.push(node);
     while (stack.length > 0) {
       node = stack.pop();
       if (node.isVisited() == false) {
         node.setVisited(); //sets node to visisted
-        drawSquare(node.xCoord * 50, node.yCoord * 50, "search");
+        if (node.xCoord == endNode.xCoord && node.yCoord == endNode.yCoord) {
+          return stack;
+        }
+        i++;
+        setTimeout(this.colorForSearch, 200 * i, node);
         node.getAdjList().forEach((element) => {
           stack.push(element);
         });
       }
     }
+  }
+
+  colorForSearch(node) {
+    console.log("drawing blue square");
+    drawSquare(node.xCoord * 50, node.yCoord * 50, "search");
   }
 
   dfsRecursive(graph, node) {
