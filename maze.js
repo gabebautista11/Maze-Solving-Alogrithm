@@ -4,6 +4,7 @@ let startNodeButton = document.getElementById("startNodeButton");
 let endNodeButton = document.getElementById("endNodeButton");
 let wallButton = document.getElementById("wallButton");
 let solveButton = document.getElementById("solveButton");
+let solved = document.querySelector(".solved")
 
 //EVENT LISTENERS
 canvas.addEventListener("mousedown", canvasClicked);
@@ -175,15 +176,17 @@ function scanGrid() {
     let solution = graph.dfs();
     console.log("finished dfs");
 
-    //drawSolution(solution) //drwas solution green
+    drawSolution(solution) //drwas solution green
   }
 }
 
 function drawSolution(solution) {
-  solution.forEach((node) => {
-    drawSquare(node.xCoord * 50, node.yCoord * 50, "solution");
-  });
+  solved.innerHTML = "SOLVED"
 }
+//   solution.forEach((node) => {
+//     drawSquare(node.xCoord * 50, node.yCoord * 50, "solution");
+//   });
+// }
 
 //TODO CREATE A GRAPH FROM THE GRID 2D Array
 
