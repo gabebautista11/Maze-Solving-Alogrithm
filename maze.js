@@ -66,6 +66,9 @@ let drawSquare = (x, y, buttonPressed) => {
   } else if (buttonPressed == "search") {
     context.fillStyle = "blue";
     context.fillRect(x, y, 50, 50);
+  } else if (buttonPressed == "solution") {
+    context.fillStyle = "green";
+    context.fillRect(x, y, 50, 50);
   } else {
     //rect white
     context.fillStyle = "rgba(255,255,255, 1)";
@@ -172,8 +175,14 @@ function scanGrid() {
     let solution = graph.dfs();
     console.log("finished dfs");
 
-    console.log(solution);
+    //drawSolution(solution) //drwas solution green
   }
+}
+
+function drawSolution(solution) {
+  solution.forEach((node) => {
+    drawSquare(node.xCoord * 50, node.yCoord * 50, "solution");
+  });
 }
 
 //TODO CREATE A GRAPH FROM THE GRID 2D Array
@@ -304,7 +313,6 @@ class Graph {
       ];
 
     return this.dfsLoop(this, startNode, endNode);
-    
   }
 
   dfsLoop(graph, node, endNode) {
