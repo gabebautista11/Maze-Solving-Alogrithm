@@ -281,16 +281,23 @@ class Graph {
         for (let c = col - 1; c < col + 2; c++) {
           //loop through cols
           if (r != row || c != col) {
-            //this makes sure it does not check the middle
-            try {
-              let neighborNodeIndex = this.getNodeIndex(r, c); //neighbor node
-              console.log(neighborNodeIndex, r, c);
-              if (neighborNodeIndex != -1) {
-                //if it could find the neighbor node
-                this.addEdge(node, neighborNodeIndex);
+            if (
+              (r == row + 1 && c == col) ||
+              (r == row - 1 && c == col) ||
+              (r == row && c == col - 1) ||
+              (r == row && c == col + 1)
+            ) {
+              //this makes sure it does not check the middle
+              try {
+                let neighborNodeIndex = this.getNodeIndex(r, c); //neighbor node
+                console.log(neighborNodeIndex, r, c);
+                if (neighborNodeIndex != -1) {
+                  //if it could find the neighbor node
+                  this.addEdge(node, neighborNodeIndex);
+                }
+              } catch (error) {
+                console.log(error);
               }
-            } catch (error) {
-              console.log(error);
             }
           }
         }
