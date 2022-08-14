@@ -5,6 +5,7 @@ let endNodeButton = document.getElementById("endNodeButton");
 let wallButton = document.getElementById("wallButton");
 let solveButton = document.getElementById("solveButton");
 let solved = document.querySelector(".solved");
+let algoSelection = document.getElementById("algo-drop-down");
 
 //EVENT LISTENERS
 canvas.addEventListener("mousedown", canvasClicked);
@@ -193,20 +194,26 @@ function scanGrid() {
   }
   //scan grid making a 2D array
   createGraph(grid);
-
-  /**
-   * creates graph from given grid
-   * @param {} grid
-   */
 }
-
+/**
+ * creates graph from given grid
+ * @param {} grid
+ */
 function createGraph(grid) {
   let graph = new Graph(grid);
 
   graph.createNodes();
-
   graph.createEdges();
-  let solution = graph.dfs();
+  let algo = algoSelection.value;
+  console.log(algo);
+  let solution = "";
+  if (algo == "dfs") {
+    solution = graph.dfs();
+  } else if (algo == "bfs") {
+    //solution = graph.bfs()
+  } else if (algo == "a*") {
+    //solution = graph.bfs
+  }
 
   drawSolution(solution); //drwas solution green
 }
@@ -396,6 +403,35 @@ class Graph {
           stack.push(element);
         });
       }
+    }
+  }
+
+  /**
+   * breadth first search
+   */
+  bfs(graph, node, endNode) {
+    // BFS (G, s)                   //Where G is the graph and s is the source node
+    //   let Q be queue.
+    //   Q.enqueue( s ) //Inserting s in queue until all its neighbour vertices are marked.
+    //   mark s as visited.
+    //   while ( Q is not empty)
+    //        //Removing that vertex from queue,whose neighbour will be visited now
+    //        v  =  Q.dequeue( )
+    //       //processing all the neighbours of v
+    //       for all neighbours w of v in Graph G
+    //            if w is not visited
+    //                     Q.enqueue( w )             //Stores w in Q to further visit its neighbour
+    //                     mark w as visited.
+
+    let queue = [];
+    queue.push(node);
+    node.setVisited();
+    while (queue.length > 0) {
+      vertex = queue.shift();
+      vetex.getAdjList().forEach((element) => {
+        queue.push(element);
+        element.setVisited();
+      });
     }
   }
 
