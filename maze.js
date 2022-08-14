@@ -4,7 +4,7 @@ let startNodeButton = document.getElementById("startNodeButton");
 let endNodeButton = document.getElementById("endNodeButton");
 let wallButton = document.getElementById("wallButton");
 let solveButton = document.getElementById("solveButton");
-let solved = document.querySelector(".solved")
+let solved = document.querySelector(".solved");
 
 //EVENT LISTENERS
 canvas.addEventListener("mousedown", canvasClicked);
@@ -16,21 +16,37 @@ solveButton.addEventListener("click", scanGrid);
 //global vars
 let currentSelected = 0; //0 is a wall, 1 is a start node, 2 is an end node
 
+/**
+ * start node toggle
+ * @param {*} e
+ */
 function startNodeButtonClicked(e) {
   currentSelected = 1;
 }
+/**
+ * end node toggle
+ * @param {*} e
+ */
 function endNodeButtonClicked(e) {
   currentSelected = 2;
 }
+/**
+ * wall button toggle
+ * @param {} e
+ */
 function wallButtonClicked(e) {
   currentSelected = 0;
 }
-
+/**
+ * draws grid
+ */
 function drawGrid() {
   drawVerticalLines();
   drawHorizontalLines();
 }
-
+/**
+ * draws vertical lines on grid
+ */
 let drawVerticalLines = () => {
   for (let x = 0; x < 550; x += 50) {
     context.beginPath();
@@ -41,6 +57,9 @@ let drawVerticalLines = () => {
   }
 };
 
+/**
+ * draws horizontal lines on grid
+ */
 let drawHorizontalLines = () => {
   for (let y = 0; y < 550; y += 50) {
     context.beginPath();
@@ -51,6 +70,12 @@ let drawHorizontalLines = () => {
   }
 };
 
+/**
+ * draws square on grid
+ * @param {} x
+ * @param {*} y
+ * @param {*} buttonPressed
+ */
 let drawSquare = (x, y, buttonPressed) => {
   if (buttonPressed == 0) {
     if (currentSelected == 0) {
@@ -106,6 +131,9 @@ function fillInSquare(x, y, buttonPressed) {
   drawSquare(xCoord, yCoord, buttonPressed);
 }
 
+/**
+ * scans grid and puts it in a 2d array
+ */
 function scanGrid() {
   ///////////////////////////////////
   // INIT 2D ARRAY
@@ -166,32 +194,34 @@ function scanGrid() {
   //scan grid making a 2D array
   createGraph(grid);
 
-  function createGraph(grid) {
-    let graph = new Graph(grid);
-
-    graph.createNodes();
-
-    graph.createEdges();
-    console.log("starting dfs");
-    let solution = graph.dfs();
-    console.log("finished dfs");
-
-    drawSolution(solution) //drwas solution green
-  }
+  /**
+   * creates graph from given grid
+   * @param {} grid
+   */
 }
 
+function createGraph(grid) {
+  let graph = new Graph(grid);
+
+  graph.createNodes();
+
+  graph.createEdges();
+  let solution = graph.dfs();
+
+  drawSolution(solution); //drwas solution green
+}
+
+/**
+ * display if the maze has been solved or not
+ * @param {*} solution
+ */
 function drawSolution(solution) {
-  solved.innerHTML = "SOLVED"
+  solved.innerHTML = "SOLVED";
 }
-//   solution.forEach((node) => {
-//     drawSquare(node.xCoord * 50, node.yCoord * 50, "solution");
-//   });
-// }
 
-//TODO CREATE A GRAPH FROM THE GRID 2D Array
-
-// create a graph class
-
+/**
+ * Graph DS
+ */
 class Graph {
   constructor(matrix) {
     this.matrix = matrix;
@@ -204,12 +234,22 @@ class Graph {
     //each node in the list has a list of all nodes that are connected to it
   }
 
+  /**
+   * adds node to graph
+   * @param {*} node
+   */
   addNode(node) {
     if (!this.adjacencyList[node]) {
       this.adjacencyList.push(node);
     }
   }
 
+  /**
+   * get index of node in the adj list
+   * @param {*} row
+   * @param {*} col
+   * @returns index of node in graph adj list
+   */
   getNodeIndex(row, col) {
     for (let index = 0; index < this.adjacencyList.length; index++) {
       if (
@@ -222,6 +262,11 @@ class Graph {
     return -1;
   }
 
+  /**
+   * adds edge between node1 and node2
+   * @param {*} node1Index
+   * @param {*} node2Index
+   */
   addEdge(node1Index, node2Index) {
     let node1 = this.adjacencyList[node1Index];
     let node2 = this.adjacencyList[node2Index];
@@ -234,7 +279,9 @@ class Graph {
     console.log("added edge");
   }
 
-  //create nodes from the matrix and uses addNode to add it to the graph
+  /**
+   * adds all node to graph from the matrix
+   */
   createNodes() {
     for (let row = 0; row < 10; row++) {
       for (let col = 0; col < 10; col++) {
@@ -325,6 +372,13 @@ class Graph {
     return this.dfsLoop(this, startNode, endNode);
   }
 
+  /**
+   * dfs using loop algo
+   * @param {} graph
+   * @param {*} node
+   * @param {*} endNode
+   * @returns
+   */
   dfsLoop(graph, node, endNode) {
     let i = 0;
     let stack = []; //stack ds
@@ -345,11 +399,20 @@ class Graph {
     }
   }
 
+  /**
+   * colors in given node the search color (blue)
+   * @param {} node
+   */
   colorForSearch(node) {
     console.log("drawing blue square");
     drawSquare(node.xCoord * 50, node.yCoord * 50, "search");
   }
 
+  /**
+   * recursive version of dfs
+   * @param {} graph
+   * @param {*} node
+   */
   dfsRecursive(graph, node) {
     node.setVisited();
     node.getAdjList().forEach((element) => {
@@ -361,6 +424,9 @@ class Graph {
   }
 }
 
+/**
+ * node DS
+ */
 class Node {
   constructor(xCoord, yCoord, value) {
     this.xCoord = xCoord; //col
@@ -368,10 +434,6 @@ class Node {
     this.value = value; //1, 2, or 3
     this.adjacencyList = new Set();
     this.visited = false;
-  }
-
-  get node() {
-    return this.node;
   }
 
   addNodeToAdjacencyList(node) {
@@ -393,14 +455,26 @@ class Node {
     });
     return true;
   }
+
+  /**
+   * sets the node visited to true
+   */
   setVisited() {
     this.visited = true;
   }
 
+  /**
+   * gets the current node object adj list
+   * @returns noeds adj list
+   */
   getAdjList() {
     return this.adjacencyList;
   }
 
+  /**
+   * gets the visited attr of the node
+   * @returns true or false if the node has been visited
+   */
   isVisited() {
     if (this.visited == false) {
       return false;
