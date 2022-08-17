@@ -1,9 +1,24 @@
-.button-div {
-  display: block;
-  margin: auto;
-  margin-bottom: 10px;
+.main-content {
+  display: flex;
 }
 
 .canvas-div {
   margin: auto;
+}
+
+.button-class {
+  display: block;
+  margin: auto;
+  width: 100px;
+  margin-bottom: 10px;
+}
+
+.button-div {
+  margin-right: 50px;
+  margin-left: 25px;
+  margin-top: 25px;
+}
+
+.instruction-box {
+  margin-left: 50px;
 }

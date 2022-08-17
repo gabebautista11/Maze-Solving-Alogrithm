@@ -8,41 +8,50 @@
     <title>Maze Solver</title>
   </head>
   <body>
-    <div class="button-div">
-      <button id="startNodeButton">Start Node</button>
-      <button id="endNodeButton">End Node</button>
-      <button id="wallButton">Walls</button>
-      <label for="algo-drop-down">Choose a search Algo:</label>
-      <select name="" id="algo-drop-down">
-        <option value="dfs">Depth First Search</option>
-        <option value="bfs">Breadth First Search</option>
-        <option value="a*">A*</option>
-      </select>
-      <button id="solveButton">Solve</button>
-    </div>
-    <h1>Maze Solving Algorithm (Depth First Search W.I.P)</h1>
-    <h1 class="solved"></h1>
-    <div class="canvas-div">
-      <canvas
-        id="mazeCanvas"
-        width="500"
-        height="500"
-        oncontextmenu="return false;"
-      ></canvas>
-    </div>
+    <div class="main-content">
+      <div class="button-div">
+        <button id="startNodeButton" class="button-class">Start Node</button>
+        <button id="endNodeButton" class="button-class">End Node</button>
+        <button id="wallButton" class="button-class">Walls</button>
+        <button id="reset-button" class="button-class">Reset Maze</button>
+        <label for="algo-drop-down" class="button-class"
+          >Choose a search Algo:</label
+        >
+        <select name="" id="algo-drop-down" class="button-class">
+          <option value="dfs">Depth First Search</option>
+          <option value="bfs">Breadth First Search</option>
+          <option value="a*">A*</option>
+        </select>
+        <button id="solveButton" class="button-class">Solve</button>
+      </div>
+      <div class="maze-box">
+        <h1>Maze Solving Algorithm</h1>
+        <h1 class="solved"></h1>
+        <div class="canvas-div">
+          <canvas
+            id="mazeCanvas"
+            width="500"
+            height="500"
+            oncontextmenu="return false;"
+          ></canvas>
+        </div>
+      </div>
 
-    <h1>Instructions</h1>
-    <ul>
-      <li>
-        To add a node, click on the button then click on the grid. Right click
-        to remove a node.
-      </li>
-      <li>Add a start node (green square)</li>
-      <li>Add a end node (red square)</li>
-      <li>Add wall nodes (black squares)</li>
-      <li>Click Solve</li>
-      <li>Refresh if it does not work</li>
-    </ul>
+      <div class="instruction-box">
+        <h1>Instructions</h1>
+        <ul>
+          <li>
+            To add a node, click on the button then click on the grid. Right
+            click to remove a node.
+          </li>
+          <li>Add a start node (green square)</li>
+          <li>Add a end node (red square)</li>
+          <li>Add wall nodes (black squares)</li>
+          <li>Click Solve</li>
+          <li>Refresh if it does not work</li>
+        </ul>
+      </div>
+    </div>
 
     <script src="maze.js"></script>
   </body>

@@ -6,6 +6,7 @@ let wallButton = document.getElementById("wallButton");
 let solveButton = document.getElementById("solveButton");
 let solved = document.querySelector(".solved");
 let algoSelection = document.getElementById("algo-drop-down");
+let resetButton = document.getElementById("reset-button");
 
 //EVENT LISTENERS
 canvas.addEventListener("mousedown", canvasClicked);
@@ -13,9 +14,21 @@ startNodeButton.addEventListener("click", startNodeButtonClicked);
 endNodeButton.addEventListener("click", endNodeButtonClicked);
 wallButton.addEventListener("click", wallButtonClicked);
 solveButton.addEventListener("click", scanGrid);
+resetButton.addEventListener("click", resetGrid);
 
 //global vars
 let currentSelected = 0; //0 is a wall, 1 is a start node, 2 is an end node
+
+/*
+ * resets grid
+ */
+function resetGrid() {
+  for (let col = 0; col < 10; col++) {
+    for (let row = 0; row < 10; row++) {
+      drawSquare(col * 50, row * 50, 1);
+    }
+  }
+}
 
 /**
  * start node toggle
@@ -210,12 +223,12 @@ function createGraph(grid) {
   if (algo == "dfs") {
     solution = graph.dfs();
   } else if (algo == "bfs") {
-    //solution = graph.bfs()
+    solution = graph.bfs();
   } else if (algo == "a*") {
-    //solution = graph.bfs
+    //solution = graph.aStar();
   }
 
-  drawSolution(solution); //drwas solution green
+  //drawSolution(solution); //draws solution green
 }
 
 /**
@@ -362,21 +375,28 @@ class Graph {
     }
   }
 
+  getStartNode() {
+    let startNode =
+      this.adjacencyList[
+        this.getNodeIndex(this.startingNodeRow, this.startingNodeCol)
+      ];
+    return startNode;
+  }
+
+  getEndNode() {
+    let endNode =
+      this.adjacencyList[
+        this.getNodeIndex(this.endingNodeRow, this.endingNodeCol)
+      ];
+    return endNode;
+  }
   /**
    * depth First Search
    */
   dfs() {
     //start node
-    let startNode =
-      this.adjacencyList[
-        this.getNodeIndex(this.startingNodeRow, this.startingNodeCol)
-      ];
-    let endNode =
-      this.adjacencyList[
-        this.getNodeIndex(this.endingNodeRow, this.endingNodeCol)
-      ];
 
-    return this.dfsLoop(this, startNode, endNode);
+    return this.dfsLoop(this, this.getStartNode(), this.getEndNode());
   }
 
   /**
@@ -409,39 +429,41 @@ class Graph {
   /**
    * breadth first search
    */
-  bfs(graph, node, endNode) {
-    // BFS (G, s)                   //Where G is the graph and s is the source node
-    //   let Q be queue.
-    //   Q.enqueue( s ) //Inserting s in queue until all its neighbour vertices are marked.
-    //   mark s as visited.
-    //   while ( Q is not empty)
-    //        //Removing that vertex from queue,whose neighbour will be visited now
-    //        v  =  Q.dequeue( )
-    //       //processing all the neighbours of v
-    //       for all neighbours w of v in Graph G
-    //            if w is not visited
-    //                     Q.enqueue( w )             //Stores w in Q to further visit its neighbour
-    //                     mark w as visited.
-
+  bfs() {
+    let endNode = this.getEndNode();
+    let node = this.getStartNode();
     let queue = [];
     queue.push(node);
     node.setVisited();
+    let i = 0;
     while (queue.length > 0) {
-      vertex = queue.shift();
-      vetex.getAdjList().forEach((element) => {
-        queue.push(element);
-        element.setVisited();
+      node = queue.shift();
+      node.getAdjList().forEach((node) => {
+        if (node.isVisited() == false) {
+          queue.push(node);
+          node.setVisited();
+          if (node.xCoord == endNode.xCoord && node.yCoord == endNode.yCoord) {
+            return stack;
+          }
+          i++;
+          setTimeout(this.colorForSearch, 200 * i, node);
+        }
       });
     }
   }
+
+  aStar() {}
 
   /**
    * colors in given node the search color (blue)
    * @param {} node
    */
   colorForSearch(node) {
+    //let startNode = getStartNode();
+    //if (node.xCoord != startNode.xCoord || node.yCoord != startNode.yCoord) {
     console.log("drawing blue square");
     drawSquare(node.xCoord * 50, node.yCoord * 50, "search");
+    //}
   }
 
   /**
