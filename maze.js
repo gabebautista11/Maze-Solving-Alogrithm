@@ -452,6 +452,9 @@ class Graph {
     }
   }
 
+  /**
+   * A* search algo
+   */
   aStar() {}
 
   /**
