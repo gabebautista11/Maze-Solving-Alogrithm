@@ -11,6 +11,7 @@ let xInputBox = document.getElementById("x-input");
 let yInputBox = document.getElementById("y-input");
 let changeGridButton = document.getElementById("change-grid-size-button");
 let searchSpeedInput = document.getElementById("search-speed");
+let generateMazeButton = document.querySelector(".generate-maze-button");
 
 //EVENT LISTENERS
 canvas.addEventListener("mousedown", canvasClicked);
@@ -21,6 +22,7 @@ solveButton.addEventListener("click", scanGrid);
 resetButton.addEventListener("click", resetGrid);
 changeGridButton.addEventListener("click", changeGridSize);
 searchSpeedInput.addEventListener("change", changeSearchSpeed);
+generateMazeButton.addEventListener("click", generateRandomMaze);
 
 //global vars
 let currentSelected = 0; //0 is a wall, 1 is a start node, 2 is an end node
@@ -31,6 +33,17 @@ let searchSpeed = searchSpeedInput.value;
 function changeSearchSpeed() {
   searchSpeed = searchSpeedInput.value;
   console.log(searchSpeed);
+}
+
+/**
+ * generates random maze
+ */
+function generateRandomMaze() {
+  generateMazeRecursive(Math.random() * GRID_COLS, Math.random() * GRID_ROWS);
+}
+
+function generateMazeRecursive(xPos, yPos) {
+  //generateMazeButton(xPos / 2, yPos / 2);
 }
 
 function changeGridSize() {
@@ -442,7 +455,7 @@ class Graph {
           return stack;
         }
         i++;
-        setTimeout(this.colorForSearch, 100 / searchSpeed * i, node);
+        setTimeout(this.colorForSearch, (100 / searchSpeed) * i, node);
         node.getAdjList().forEach((element) => {
           stack.push(element);
         });
@@ -470,7 +483,7 @@ class Graph {
             return stack;
           }
           i++;
-          setTimeout(this.colorForSearch, 100 / searchSpeed * i, node);
+          setTimeout(this.colorForSearch, (100 / searchSpeed) * i, node);
         }
       });
     }
