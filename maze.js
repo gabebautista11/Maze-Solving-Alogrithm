@@ -7,6 +7,11 @@ let solveButton = document.getElementById("solveButton");
 let solved = document.querySelector(".solved");
 let algoSelection = document.getElementById("algo-drop-down");
 let resetButton = document.getElementById("reset-button");
+let xInputBox = document.getElementById("x-input");
+let yInputBox = document.getElementById("y-input");
+let changeGridButton = document.getElementById("change-grid-size-button");
+let searchSpeedInput = document.getElementById("search-speed");
+let generateMazeButton = document.querySelector(".generate-maze-button");
 
 //EVENT LISTENERS
 canvas.addEventListener("mousedown", canvasClicked);
@@ -15,16 +20,47 @@ endNodeButton.addEventListener("click", endNodeButtonClicked);
 wallButton.addEventListener("click", wallButtonClicked);
 solveButton.addEventListener("click", scanGrid);
 resetButton.addEventListener("click", resetGrid);
+changeGridButton.addEventListener("click", changeGridSize);
+searchSpeedInput.addEventListener("change", changeSearchSpeed);
+generateMazeButton.addEventListener("click", generateRandomMaze);
 
 //global vars
 let currentSelected = 0; //0 is a wall, 1 is a start node, 2 is an end node
+let GRID_ROWS = yInputBox.value;
+let GRID_COLS = xInputBox.value;
+let searchSpeed = searchSpeedInput.value;
+
+function changeSearchSpeed() {
+  searchSpeed = searchSpeedInput.value;
+  console.log(searchSpeed);
+}
+
+/**
+ * generates random maze
+ */
+function generateRandomMaze() {
+  generateMazeRecursive(Math.random() * GRID_COLS, Math.random() * GRID_ROWS);
+}
+
+function generateMazeRecursive(xPos, yPos) {
+  //generateMazeButton(xPos / 2, yPos / 2);
+}
+
+function changeGridSize() {
+  GRID_COLS = xInputBox.value;
+  GRID_ROWS = yInputBox.value;
+  canvas.width = GRID_COLS * 50;
+  canvas.height = GRID_ROWS * 50;
+  context.clearRect(0, 0, canvas.width, canvas.height); //clears canvas
+  drawGrid();
+}
 
 /*
  * resets grid
  */
 function resetGrid() {
-  for (let col = 0; col < 10; col++) {
-    for (let row = 0; row < 10; row++) {
+  for (let col = 0; col < GRID_COLS; col++) {
+    for (let row = 0; row < GRID_ROWS; row++) {
       drawSquare(col * 50, row * 50, 1);
     }
   }
@@ -62,10 +98,11 @@ function drawGrid() {
  * draws vertical lines on grid
  */
 let drawVerticalLines = () => {
-  for (let x = 0; x < 550; x += 50) {
+  //for(let x = 0; x < GRIDCOLS * 55)
+  for (let x = 0; x < GRID_COLS * 55; x += 50) {
     context.beginPath();
     context.moveTo(x, 0);
-    context.lineTo(x, 500);
+    context.lineTo(x, GRID_ROWS * 50);
     context.closePath();
     context.stroke();
   }
@@ -75,10 +112,10 @@ let drawVerticalLines = () => {
  * draws horizontal lines on grid
  */
 let drawHorizontalLines = () => {
-  for (let y = 0; y < 550; y += 50) {
+  for (let y = 0; y < GRID_ROWS * 55; y += 50) {
     context.beginPath();
     context.moveTo(0, y);
-    context.lineTo(500, y);
+    context.lineTo(GRID_COLS * 50, y);
     context.closePath();
     context.stroke();
   }
@@ -152,13 +189,13 @@ function scanGrid() {
   ///////////////////////////////////
   // INIT 2D ARRAY
   let grid = [];
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < GRID_COLS; i++) {
     grid[i] = [];
   }
   //////////////////////////////////
 
-  for (let row = 0; row < 10; row++) {
-    for (let col = 0; col < 10; col++) {
+  for (let row = 0; row < GRID_ROWS; row++) {
+    for (let col = 0; col < GRID_COLS; col++) {
       let pixelData = context.getImageData(
         row * 50 + 1,
         col * 50 + 1,
@@ -303,8 +340,8 @@ class Graph {
    * adds all node to graph from the matrix
    */
   createNodes() {
-    for (let row = 0; row < 10; row++) {
-      for (let col = 0; col < 10; col++) {
+    for (let row = 0; row < GRID_ROWS; row++) {
+      for (let col = 0; col < GRID_COLS; col++) {
         //console.log(this.matrix[row][col]); //reads left to right top to bottom
         if (this.matrix[row][col] == 0) {
           //this is a white box
@@ -327,8 +364,8 @@ class Graph {
    * Loops through the matrix and adds edges from the 2D array
    */
   createEdges() {
-    for (let row = 0; row < 10; row++) {
-      for (let col = 0; col < 10; col++) {
+    for (let row = 0; row < GRID_ROWS; row++) {
+      for (let col = 0; col < GRID_COLS; col++) {
         if (this.getNodeIndex(row, col) != -1) {
           this.checkNeighbors(row, col, this.getNodeIndex(row, col));
         }
@@ -418,7 +455,7 @@ class Graph {
           return stack;
         }
         i++;
-        setTimeout(this.colorForSearch, 200 * i, node);
+        setTimeout(this.colorForSearch, (100 / searchSpeed) * i, node);
         node.getAdjList().forEach((element) => {
           stack.push(element);
         });
@@ -446,7 +483,7 @@ class Graph {
             return stack;
           }
           i++;
-          setTimeout(this.colorForSearch, 200 * i, node);
+          setTimeout(this.colorForSearch, (100 / searchSpeed) * i, node);
         }
       });
     }

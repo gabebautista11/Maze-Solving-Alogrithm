@@ -6,6 +6,11 @@
   margin: auto;
 }
 
+#mazeCanvas {
+  overflow-x: scroll;
+  overflow-y: scroll;
+}
+
 .button-class {
   display: block;
   margin: auto;
@@ -21,4 +26,26 @@
 
 .instruction-box {
   margin-left: 50px;
+}
+
+.grid-label {
+  display: block;
+  margin: auto;
+}
+.x-input {
+  margin-top: 10px;
+  display: block;
+  width: 20px;
+}
+
+.y-input {
+  margin-top: 10px;
+  display: block;
+  width: 20px;
+}
+
+#x-input,
+#y-input {
+  width: 50px;
+  display: block;
 }
