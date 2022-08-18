@@ -442,7 +442,7 @@ class Graph {
           return stack;
         }
         i++;
-        setTimeout(this.colorForSearch, searchSpeed * 100 * i, node);
+        setTimeout(this.colorForSearch, 100 / searchSpeed * i, node);
         node.getAdjList().forEach((element) => {
           stack.push(element);
         });
@@ -470,7 +470,7 @@ class Graph {
             return stack;
           }
           i++;
-          setTimeout(this.colorForSearch, searchSpeed * 100 * i, node);
+          setTimeout(this.colorForSearch, 100 / searchSpeed * i, node);
         }
       });
     }
