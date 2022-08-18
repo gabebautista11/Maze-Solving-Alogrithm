@@ -176,7 +176,7 @@ function scanGrid() {
   ///////////////////////////////////
   // INIT 2D ARRAY
   let grid = [];
-  for (let i = 0; i < GRID_ROWS; i++) {
+  for (let i = 0; i < GRID_COLS; i++) {
     grid[i] = [];
   }
   //////////////////////////////////
