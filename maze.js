@@ -340,22 +340,22 @@ class Graph {
    * adds all node to graph from the matrix
    */
   createNodes() {
-    for (let row = 0; row < GRID_ROWS; row++) {
-      for (let col = 0; col < GRID_COLS; col++) {
+    for (let col = 0; col < GRID_COLS; col++) {
+      for (let row = 0; row < GRID_ROWS; row++) {
         //console.log(this.matrix[row][col]); //reads left to right top to bottom
-        if (this.matrix[row][col] == 0) {
+        if (this.matrix[col][row] == 0) {
           //this is a white box
           this.addNode(new Node(col, row, 0)); //add node to graph
-        } else if (this.matrix[row][col] == 2) {
+        } else if (this.matrix[col][row] == 2) {
           //start node
           this.addNode(new Node(col, row, 2));
-          this.startingNodeCol = col;
-          this.startingNodeRow = row;
-        } else if (this.matrix[row][col] == 3) {
+          this.startingNodeCol = row;
+          this.startingNodeRow = col;
+        } else if (this.matrix[col][row] == 3) {
           //end node
           this.addNode(new Node(col, row, 3));
-          this.endingNodeCol = col;
-          this.endingNodeRow = row;
+          this.endingNodeCol = row;
+          this.endingNodeRow = col;
         }
       }
     }
