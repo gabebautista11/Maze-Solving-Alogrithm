@@ -345,17 +345,17 @@ class Graph {
         //console.log(this.matrix[row][col]); //reads left to right top to bottom
         if (this.matrix[col][row] == 0) {
           //this is a white box
-          this.addNode(new Node(row, col, 0)); //add node to graph
+          this.addNode(new Node(col, row, 0)); //add node to graph
         } else if (this.matrix[col][row] == 2) {
           //start node
-          this.addNode(new Node(row, col, 2));
-          this.startingNodeCol = col;
-          this.startingNodeRow = row;
+          this.addNode(new Node(col, row, 2));
+          this.startingNodeCol = row;
+          this.startingNodeRow = col;
         } else if (this.matrix[col][row] == 3) {
           //end node
-          this.addNode(new Node(row, col, 3));
-          this.endingNodeCol = col;
-          this.endingNodeRow = row;
+          this.addNode(new Node(col, row, 3));
+          this.endingNodeCol = row;
+          this.endingNodeRow = col;
         }
       }
     }
