@@ -336,6 +336,8 @@ class Graph {
     console.log("added edge");
   }
 
+
+  //does this work
   /**
    * adds all node to graph from the matrix
    */
