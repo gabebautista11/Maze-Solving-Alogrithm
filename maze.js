@@ -418,7 +418,12 @@ class Graph {
           return stack;
         }
         i++;
-        setTimeout(this.colorForSearch, 200 * i, node);
+        if (
+          node.xCoord != this.startingNodeCol ||
+          node.yCoord != this.startingNodeRow
+        ) {
+          setTimeout(this.colorForSearch, 200 * i, node);
+        }
         node.getAdjList().forEach((element) => {
           stack.push(element);
         });
