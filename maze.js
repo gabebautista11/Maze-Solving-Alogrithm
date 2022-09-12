@@ -291,7 +291,7 @@ class Graph {
     let node1 = this.adjacencyList[node1Index];
     let node2 = this.adjacencyList[node2Index];
     if (node1.isNodeNotInList(node2) && node2.isNodeNotInList(node1)) {
-      //this if statment checks before adding duplicates
+      //this if statement checks before adding duplicates
       node1.addNodeToAdjacencyList(node2);
       node2.addNodeToAdjacencyList(node1);
     }
@@ -413,7 +413,7 @@ class Graph {
     while (stack.length > 0) {
       node = stack.pop();
       if (node.isVisited() == false) {
-        node.setVisited(); //sets node to visisted
+        node.setVisited(); //sets node to visited
         if (node.xCoord == endNode.xCoord && node.yCoord == endNode.yCoord) {
           return stack;
         }
@@ -526,7 +526,7 @@ class Node {
 
   /**
    * gets the current node object adj list
-   * @returns noeds adj list
+   * @returns nodes adj list
    */
   getAdjList() {
     return this.adjacencyList;
