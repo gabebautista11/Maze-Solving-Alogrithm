@@ -338,9 +338,9 @@ class Graph {
 
   /**
    * checks neighbor nodes for edge connection
-   * @param {*} row
-   * @param {*} col
-   * @param {*} node
+   * @param {int} row
+   * @param {int} col
+   * @param {Node} node
    */
   checkNeighbors(row, col, node) {
     //if its on any edge check only what is around it
@@ -401,9 +401,9 @@ class Graph {
 
   /**
    * dfs using loop algo
-   * @param {} graph
-   * @param {*} node
-   * @param {*} endNode
+   * @param {Graph} graph
+   * @param {Node} node
+   * @param {Node} endNode
    * @returns
    */
   dfsLoop(graph, node, endNode) {
